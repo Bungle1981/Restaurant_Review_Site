@@ -137,9 +137,5 @@ def downloadCSV():
     return send_file(csvPath, as_attachment=True) # Serves CSV to the user as browser download.
 
 
-
-# Create test restaurants/reviews ready for testing if no data in database
-model.testingInit()
-
 if __name__ == "__main__":
     app.run(debug=True)

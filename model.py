@@ -7,34 +7,6 @@ app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///data.db"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False #prevents some warnings
 db = SQLAlchemy(app)
 
-#Data for drop down selections - dummy at the mo - will need replacing once we determine what options we want for final.
-serviceTypes = ["A La Carte", "Buffet", "Cafe", "Fast Food", "Fine Dining", "Food Truck / Street Food", "Pub", "Takeaway", "Other"]
-cuisineTypes = ['American', 'Asian', 'Caribbean', 'English', 'French', 'Italian', 'Middle Eastern', 'Vegan', 'Other']
-occasionTypes = ['Business Lunch', 'Family Meal', 'Kids', 'Romantic Meal', 'Scenic Views', 'Special Events', 'Other']
-mealOptions = ['Breakfast', 'Brunch', 'Lunch', 'Dinner', 'Late Night', 'Other', 'Multiple']
-#Test data - not needed when testing for real
-testrestaurants = [{"name": "Benny's Italian", "serviceType": "Takeaway", "cuisine": "Italian", "diningOptions": "Dinner"}, {"name": "Le Mariners", "serviceType": "Fine Dining", "cuisine": "French", "diningOptions": "Dinner",}, {"name": "Wendy's Diner", "serviceType": "Casual", "cuisine": "American", "diningOptions": "Dinner",}]
-testreviews = [
-    {"restaurantName": "Benny's Italian", "suitedfor": "Couples",  "expense": 4, "quality": 4,
-     "ambiance": 2, "servicequality": 1, "cleanliness": 4, "speed": 5, "value": 2, "allergyinfo": 3,
-     "overallrating": 5, "comments": "fine"},
-    {"restaurantName": "Benny's Italian", "suitedfor": "Couples", "expense": 3, "quality": 3,
-     "ambiance": 1, "servicequality": 1, "cleanliness": 4, "speed": 5, "value": 4, "allergyinfo": 3,
-     "overallrating": 5, "comments": "Not bad"},
-    {"restaurantName": "Benny's Italian", "suitedfor": "Kids", "expense": 1, "quality": 1,
-     "ambiance": 1, "servicequality": 1, "cleanliness": 1, "speed": 1, "value": 1, "allergyinfo": 3,
-     "overallrating": 3, "comments": "Horrid"},
-    {"restaurantName": "Le Mariners", "suitedfor": "Families", "expense": 4, "quality": 4,
-     "ambiance": 2, "servicequality": 1, "cleanliness": 4, "speed": 5, "value": 2, "allergyinfo": 3,
-     "overallrating": 2, "comments": "Amazing!!"},
-    {"restaurantName": "Wendy's Diner", "suitedfor": "Weddings", "expense": 4, "quality": 4,
-     "ambiance": 2, "servicequality": 1, "cleanliness": 4, "speed": 5, "value": 2, "allergyinfo": 3,
-     "overallrating": 1, "comments": "fine"},
-    {"restaurantName": "Le Mariners", "suitedfor": "Couples", "expense": 5, "quality": 5,
-     "ambiance": 5, "servicequality": 5, "cleanliness": 5, "speed": 5, "value": 5, "allergyinfo": 3,
-     "overallrating": 1, "comments": "My favourite"},
-]
-
 # Class schemas for database
 class MealType(db.Model):
     __tablename__ = "diningoptions"
@@ -236,45 +208,3 @@ def returnRestaurant(id):
 def returnReviews(id):
     reviews = db.session.query(Review).filter(Review.restaurantID == id).all()
     return jsonify(results=[review.to_dict() for review in reviews])  # Creates a dictionary item for each within the same JSON
-
-
-# FUNCTIONS TO CREATE DUMMY DATA IN TABLES FOR TESTING
-def setupTestRestaurants():
-    # If no restaurants exist in the database, 3 test restaurants will be created to help testing.
-    existingrestaurants = returnDatabaseColumnData(Restaurant, "restaurantName")
-    if not existingrestaurants:
-        for restaurant in testrestaurants:
-            addRestaurant(name=restaurant["name"], serviceType=restaurant["serviceType"], cuisineType=restaurant["cuisine"], diningOptions=restaurant["diningOptions"])
-
-def setupTestReviews():
-    # If no reviews exist in the database, 6 test reviews will be created to help testing.
-    existingreviews = db.session.query(Review).all()
-    if not existingreviews:
-        for review in testreviews:
-            addReview(review["restaurantName"], review["suitedfor"], review["expense"],review["quality"],review["ambiance"],review["servicequality"],review["cleanliness"],review["speed"],review["value"],review["allergyinfo"], review["overallrating"], review["comments"])
-
-def setupOtherData():
-    existingservicetypes = returnDatabaseColumnData(ServiceType, "serviceType")
-    if not existingservicetypes:
-        for service in serviceTypes:
-            addSingleDBOption("service", service)
-    existingcuisinetypes = returnDatabaseColumnData(Cuisine, "cuisine")
-    if not existingcuisinetypes:
-        for cuisine in cuisineTypes:
-            addSingleDBOption("cuisine", cuisine)
-    existingoccassontypes = returnDatabaseColumnData(Occasion, "diningOccasion")
-    if not existingoccassontypes:
-        for occasion in occasionTypes:
-            addSingleDBOption("occasion", occasion)
-    existingmealtypes = returnDatabaseColumnData(MealType, "mealOption")
-    if not existingmealtypes:
-        for meal in mealOptions:
-            addSingleDBOption("diningoption", meal)
-
-def testingInit():
-    # Single function to run the other test / setup functions.
-    setupTestRestaurants()
-    setupTestReviews()
-    setupOtherData()
-
-
