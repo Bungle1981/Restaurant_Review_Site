@@ -2,6 +2,7 @@ import csv
 from flask import Flask, render_template, request, send_file
 
 app = Flask(__name__)
+app.config["DEBUG"] = True
 
 import model
 csvPath = "RestaurantData.csv"
