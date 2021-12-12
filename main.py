@@ -1,10 +1,8 @@
 import csv
-from flask import Flask, render_template, request, redirect, url_for, send_file, flash, jsonify, Response
-import json
+from flask import Flask, render_template, request, send_file
 
 app = Flask(__name__)
-# from flask_bootstrap import Bootstrap
-# Bootstrap(app)
+
 import model
 csvPath = "RestaurantData.csv"
 
