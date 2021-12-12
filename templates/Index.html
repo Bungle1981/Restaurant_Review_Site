@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Restaurant Review Site</title>
+    <link rel="stylesheet" href="static/assets/css/styles.css"/>
+    <!-- Link to font awesome -->
+    <script src="https://kit.fontawesome.com/c18df075a8.js" crossorigin="anonymous"></script>
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;400;700&display=swap" rel="stylesheet">
+    <!-- Load JS file -->
+    <script defer src="static/assets/js/Index.js" type="module"></script>
+  </head>
+
+  <body>
+    <div class="content-container" id="content-container">
+      <div class="header">
+        <!-- Page Heading -->
+        <div id="main-page-heading">
+          <h1>'Local Newspaper' Restaurant Review Site</h1>
+        </div>
+        <!-- Explanatory introduction text -->
+      </div>
+      
+      <div class="body">
+      <!-- Flash text here -->
+          <div id="body-content">
+            <!-- Content for the body part of the page, not the header or footer -->
+            <div class="section-container" id="-section-container">
+                <!-- Table for search results -->
+                <div class="search-fields">
+                  <form class="search-form">
+                    <span class="search-label">Search by</span>
+                    <input class="search-dropdowns" id="restaurantSearch" list="restaurants" name="restaurantSearch-dropdown" placeholder="Restaurant name"> 
+                    <datalist id="restaurants">
+                      <!-- Add all options here from the restaurants data -->
+                      {% for restaurant in restaurants: %}
+                        <option value="{{ restaurant.restaurantName }}">{{ restaurant.restaurantName }}</option>
+                      {% endfor %}
+                    </datalist>
+
+                    <select class="search-dropdowns" id="cuisine-dropdown" name="cuisine-dropdown"> 
+                      <!-- Add all options here from the cuisines table on load -->
+                      <option value="" disabled selected>Cuisine</option>
+                      {% for cuisine in cuisines: %}
+                        <option value="{{ cuisine.cuisine }}">{{ cuisine.cuisine }}</option>
+                      {% endfor %}
+                    </select>
+
+                    <select class="search-dropdowns" id="cost-dropdown" name="cost-dropdown"> 
+                      <!-- Add all options here from the cuisines table on load -->
+                      <option value="" disabled selected>Cost</option>
+                      <option value=1>£</option>
+                      <option value=2>££</option>
+                      <option value=3>£££</option>
+                      <option value=4>££££</option>
+                      <option value=5>£££££</option>
+                    </select>
+
+                    <select class="search-dropdowns" id="occasion-dropdown" name="occasion-dropdown"> 
+                      <!-- Add all options here from the occasions table on load -->
+                      <option value="" disabled selected>Recommended Occasions</option>
+                      {% for occasion in occasions: %}
+                        <option value="{{ occasion.diningOccasion }}">{{occasion.diningOccasion}}</option>
+                      {% endfor %}
+                    </select>
+                    <button type="button" class="iconButton" id="searchButton"><i class="fas fa-search"></i></button>
+                  </form>
+                </div>
+                
+                <div class="search-pane">
+                  <div class="search-results-pane" id="search-results-pane">
+                    <!-- Add Loader -->
+                    <div class="loader" id="loader" hidden>
+                      <img src="static/assets/img/loader.svg" alt="loader">
+                    </div>
+                    <div class="results">
+                    </div>
+                  </div>
+                
+                  <div class="restaurant-summary-pane" id="restaurant-summary-pane">
+                    <div id="summary-content" hidden>
+                      <div class="restaurant-summary-header">
+                        <h1 id="restaurantNameHeading"></h2>
+                        <button id="reviewThisRestaurantButton">Review this restaurant</button>
+                      </div>
+                      <div class="restaurant-scores restaurant-info-section">
+                      </div>
+                      <div class="restaurant-review-comments restaurant-info-section">
+                        <h3>Our readers had the following to say...</h3>
+                        <div class="reviews">
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+            </div> 
+          </div>
+      </div>
+
+      <div class="footer">
+        <p id="review-flash-message" class="flashmessage" hidden>Thanks for reviewing!</p>
+        <p id="restaurant-flash-message" class="flashmessage" hidden>Thanks for adding a restaurant!</p>
+      </div>
+    </div>
+
+    <div class="modal-container" id="review-modal">
+      <div class="content-container">
+        <!-- Heading -->
+        <i class="fas fa-times close-icon" id="close-reviewmodal"></i>
+        <div id="modal-heading-text">
+          <h1 id="reviewModalHeading">Review This Restaurant</h1>
+          <p id="errorSubmissionText" class="errorSubmissionText" hidden>Please answer all questions.</p>  
+        </div>
+        <form id="reviewModalForm">
+          <div id="review-details">          
+            <!-- review questions -->
+            <div class="section-container" id="reviewInput-section-container">    
+              <div class="sectionInputs">
+                <!-- User selects which meals events they would recommend at this restaurant. -->
+                <div class="question-answer-section">
+                  <p class="question">Recommended occasion?</p>
+                  <div class="answer">
+                    <select class="dropdown-choices" id="occasions-dropdown" name="occasions-dropdown" required> 
+                      <!-- Add all options here from the restaurants data when page is rendered -->
+                      <option value="" disabled selected>Please select your answer...</option>
+                      {% for occasion in occasions: %}
+                        <option value="{{ occasion.diningOccasion }}">{{occasion.diningOccasion}}</option>
+                      {% endfor %}
+                    </select>
+                  </div>
+                </div>
+                <!-- User enters AVERAGE COST PER HEAD -->
+                <div class="question-answer-section">
+                  <p class="question">Cost per head?</p>
+                  <div class="answer">
+                    <select class="dropdown-choices" id="expense-dropdown" name="expense-dropdown" required> 
+                      <!-- Add all options here from the restaurants data -->
+                      <option value="" disabled selected>Please select your answer...</option>
+                      <option value="1">£</option>
+                      <option value="2">££</option>
+                      <option value="3">£££</option>
+                      <option value="4">££££</option>
+                      <option value="5">£££££</option>
+                    </select>
+                  </div>
+                </div>
+                <!-- User enters FOOD QUALITY SCORE -->
+                <div class="question-answer-section">
+                  <p class="question">Food quality?</p>
+                  <div class="answer">
+                  <select class="dropdown-choices" id="foodQuality-dropdown" name="foodQuality-dropdown"required> 
+                      <!-- Add all options here from the restaurants data -->
+                      <option value="" disabled selected>Please select your answer...</option>
+                      <option value="1">Terrible</option>
+                      <option value="2">Poor</option>
+                      <option value="3">Average</option>
+                      <option value="4">Very good</option>
+                      <option value="5">Excellent</option>
+                    </select>
+                  </div>
+                </div>   
+                <!-- User enters AMBIANCE SCORE -->
+                <div class="question-answer-section">
+                  <p class="question">Ambiance / atmosphere?</p>
+                  <div class="answer">
+                    <select class="dropdown-choices" id="ambiance-dropdown" name="ambiance-dropdown" required> 
+                      <!-- Add all options here from the restaurants data -->
+                      <option value="" disabled selected>Please select your answer...</option>
+                      <option value="1">Terrible</option>
+                      <option value="2">Poor</option>
+                      <option value="3">Average</option>
+                      <option value="4">Very good</option>
+                      <option value="5">Excellent</option>
+                    </select>
+                  </div>
+                </div>
+                <!-- User enters QUALITY OF SERVICE SCORE -->
+                <div class="question-answer-section">
+                  <p class="question">Customer service?</p>
+                  <div class="answer">
+                    <select class="dropdown-choices" id="customerService-dropdown" name="customerService-dropdown" required> 
+                      <option value="" disabled selected>Please select your answer...</option>
+                      <option value="1">Terrible</option>
+                      <option value="2">Poor</option>
+                      <option value="3">Average</option>
+                      <option value="4">Very good</option>
+                      <option value="5">Excellent</option>
+                    </select>
+                  </div>
+                </div>
+                <!-- User enters CLEANLINESS SCORE -->
+                <div class="question-answer-section">
+                  <p class="question">Cleanliness?</p>
+                  <div class="answer">
+                    <select class="dropdown-choices" id="cleanliness-dropdown" name="cleanliness-dropdown" required> 
+                      <option value="" disabled selected>Please select your answer...</option>
+                      <option value="1">Terrible</option>
+                      <option value="2">Poor</option>
+                      <option value="3">Average</option>
+                      <option value="4">Very good</option>
+                      <option value="5">Excellent</option>
+                    </select>
+                  </div>
+                </div>
+                <!-- User enters SPEED OF SERVICE SCORE -->
+                <div class="question-answer-section">
+                  <p class="question">Speed of service?</p>
+                  <div class="answer">
+                    <select class="dropdown-choices" id="speedofservice-dropdown" name="speedOfService-dropdown" required> 
+                      <option value="" disabled selected>Please select your answer...</option>
+                      <option value="1">Terrible</option>
+                      <option value="2">Poor</option>
+                      <option value="3">Average</option>
+                      <option value="4">Very good</option>
+                      <option value="5">Excellent</option>
+                    </select>
+                  </div>
+                </div>
+                <!-- User enters VALUE FOR MONEY SCORE -->
+                <div class="question-answer-section">
+                  <p class="question">Value for money?</p>
+                  <div class="answer">
+                    <select class="dropdown-choices" name="valueForMoney-dropdown" id="valueForMoney-dropdown" required> 
+                      <option value="" disabled selected>Please select your answer...</option>
+                      <option value="1">Terrible</option>
+                      <option value="2">Poor</option>
+                      <option value="3">Average</option>
+                      <option value="4">Very good</option>
+                      <option value="5">Excellent</option>
+                    </select>
+                  </div>
+                </div>
+                <!-- User enters ALLERGY INFO SCORE -->
+                <div class="question-answer-section">
+                  <p class="question">Allergy information?</p>
+                  <div class="answer">
+                    <select class="dropdown-choices" name="allergy-dropdown" id="allergy-dropdown" required>
+                      <option value="" disabled selected>Please select your answer...</option>
+                      <option value="1">Terrible</option>
+                      <option value="2">Poor</option>
+                      <option value="3">Average</option>
+                      <option value="4">Very good</option>
+                      <option value="5">Excellent</option>
+                    </select>
+                  </div>
+                </div>
+                <!-- User enters OVERALL RATING SCORE -->
+                <div class="question-answer-section">
+                  <p class="question">Overall, how would you rate this restaurant?</p>
+                  <div class="answer">
+                    <select class="dropdown-choices" name="overallRating-dropdown" id="overallRating-dropdown" required> 
+                      <option value="" disabled selected>Please select your answer...</option>
+                      <option value="1">Terrible</option>
+                      <option value="2">Poor</option>
+                      <option value="3">Average</option>
+                      <option value="4">Very good</option>
+                      <option value="5">Excellent</option>
+                    </select>
+                  </div>
+                </div>
+                <!-- User enters COMMENTS -->
+                <div class="question-answer-section">
+                  <p class="question">Finally, please leave a short review (100 words or less).</p>
+                  <div class="answer">
+                    <textarea name="reviewComments" placeholder="Please type your comments here..." id="reviewComments" cols="60" rows="10" required></textarea>
+                    <p id="wordcount">0 / 100 words</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div> 
+          <!-- personal data statement and consent -->
+          <div class="section-container" id="consent-section-container">
+            <hr>
+            <div class="section-header">
+              <h2>Consent for us to use your answers</h2>
+            </div>
+            <div class="section-text">
+              <span class="section-help-text">We are not collecting any personal data about you, other than the information you have entered above. If you are happy to share your review with us and allow us to use your responses and comments in our report and any future , please tick the box to confirm your consent.</span> <input id="consent-checkbox" type="checkbox">
+            </div> 
+            <div class="modal-button-container">
+              <!-- <button type="button" id="closeReviewModal">Close</button> -->
+              <button type="button" id="reviewSubmitButton" hidden>Submit Review</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div class="modal-container" id="restaurant-modal">
+      <div class="content-container">
+        <!-- Heading -->
+        <i class="fas fa-times close-icon" id="close-restaurantmodal"></i>
+        <div id="modal-heading-text">
+          <h1 id="restaurantModalHeading">Add A New Restaurant</h1>
+          <p id="restaurantErrorSubmissionText" class="errorSubmissionText" hidden>Please answer all questions.</p>  
+        </div>
+        <form id="restaurantModalForm">
+          <div id="restaurant-details">          
+            <!-- review questions -->
+            <div class="section-container" id="restaurantInput-section-container">    
+            <div class="restaurantSectionInputs">
+                <!-- User enters RESTAURANT NAME -->
+                <div class="question-answer-section">
+                  <p class="question">What is the name of the restaurant?</p>
+                  <div class="answer">
+                    <input type="" id="restaurantNameInput">
+                  </div>
+                </div>     
+                <!-- User enters CUISINE INFO -->
+                <div class="question-answer-section">
+                  <p class="question">What sort of cuisine does the restaurant serve?</p>
+                  <div class="answer">
+                    <select class="dropdown-choices" name="cuisineInput-dropdown" id="cuisineInput-dropdown" required>
+                      <option value="" disabled selected>Please select your answer...</option>
+                      {% for cuisine in cuisines: %}
+                        <option value="{{ cuisine.cuisine }}">{{ cuisine.cuisine }}</option>
+                      {% endfor %}
+                    </select>
+                  </div>
+                </div>
+                <!-- User enters SERVICE TYPE -->
+                <div class="question-answer-section">
+                  <p class="question">What sort of service does this restaurant offer?</p>
+                  <div class="answer">
+                    <select class="dropdown-choices" name="serviceInput-dropdown" id="serviceInput-dropdown" required>
+                      <option value="" disabled selected>Please select your answer...</option>
+                      <!-- Render from table -->
+                        {% for service in services: %}
+                          <option value="{{ service.serviceType }}">{{ service.serviceType }}</option>
+                        {% endfor %}
+                    </select>
+                  </div>
+                </div>
+                <!-- User enters DINING OPTIONS -->
+                <div class="question-answer-section">
+                  <p class="question">Which meals are this restaurant open for?</p>
+                  <div class="answer">
+                    <select class="dropdown-choices" name="diningOptionsInput-dropdown" id="diningOptionsInput-dropdown" required>
+                      <option value="" disabled selected>Please select your answer...</option>
+                      <!-- Render from table -->
+                        {% for mealtype in mealtypes: %}
+                          <option value="{{ mealtype.mealOption }}">{{ mealtype.mealOption }}</option>
+                        {% endfor %}
+                    </select>
+                  </div>
+                </div>
+            </div>
+          </div> 
+        </form>
+        <div class="modal-button-container">
+          <!-- <button type="button" id="closeReviewModal">Close</button> -->
+          <button type="button" id="restaurantSubmitButton">Add Restaurant</button>
+        </div>
+      </div>
+    </div>
+
+  </body>
+</html>

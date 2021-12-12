@@ -1,0 +1,7 @@
+Review_ID,Restaurant,Service_Type,Cuisine,Suited_For,Dining_Options,Cost_PerHead,Food_Quality,Ambiance,Service_Quality,Cleanliness,Speed_OfService,Value_ForMoney,Allergy_InfoProvided,Overall_Rating,Comments
+1,Benny's Italian,Takeaway,Italian,Couples,Dinner,4,4,2,1,4,5,2,Yes,Poor,fine
+2,Benny's Italian,Takeaway,Italian,Couples,Dinner,3,3,1,1,4,5,4,Yes,Good,Not bad
+3,Benny's Italian,Takeaway,Italian,Kids,Dinner,1,1,1,1,1,1,1,Yes,Good,Horrid
+4,Le Mariners,Fine Dining,French,Families,Dinner,4,4,2,1,4,5,2,Yes,Poor,Amazing!!
+5,Wendy's Diner,Casual,American,Weddings,Dinner,4,4,2,1,4,5,2,Yes,Excellent,fine
+6,Le Mariners,Fine Dining,French,Couples,Dinner,5,5,5,5,5,5,5,No,Excellent,My favourite
