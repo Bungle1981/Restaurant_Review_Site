@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Restaurant Review Site - Admin Page</title>
+    <link rel="stylesheet" href="static/assets/css/styles.css"/>
+    <!-- Link to font awesome -->
+    <script src="https://kit.fontawesome.com/c18df075a8.js" crossorigin="anonymous"></script>
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;400;700&display=swap" rel="stylesheet">
+    <!-- Load JS file -->
+    <script defer src="Index.js" type="module"></script>
+  </head>
+
+  <body>
+    <div class="content-container" id="content-container">
+      <div class="header">
+        <!-- Page Heading -->
+        <div id="main-page-heading">
+          <h1>'Local Newspaper' Admin Page</h1>
+        </div>
+        <!-- Explanatory introduction text -->
+      </div>
+      
+      <div class="body">
+          <div id="body-content">
+            <!-- Content for the body part of the page, not the header or footer -->
+            <div class="section-container" id="-section-container">
+                <!-- Table for search results -->
+                
+                <div class="admin-pane">
+                  <form>
+                    <button class="csv-download" id="csv-download" formaction="{{ url_for('downloadCSV') }}">
+                      <i class="fas fa-file-download"></i>
+                      <h2>Download CSV</h1>
+                    </button>
+                  </form>
+                </div> 
+            </div> 
+          </div>
+      </div>
+    </div>
+
+
+  </body>
+</html>

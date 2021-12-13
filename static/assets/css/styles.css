@@ -515,6 +515,20 @@ h3 {
   margin-bottom: 10px;
 }
 
+/* Admin Page */
+#csv-download {
+  margin-top: 60px;
+  height: auto;
+  padding-left: 30px;
+  padding-right: 30px;
+  padding-top: 30px;
+}
+
+.fa-file-download {
+  font-size: 4rem;
+}
+
+
 /* media query */
 @media screen and (max-width: 1300px) {
   .content-container {

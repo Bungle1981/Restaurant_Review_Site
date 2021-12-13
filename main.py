@@ -121,13 +121,9 @@ def homePage():
     return render_template("Index.html", restaurants=model.returnDatabaseColumnData(model.Restaurant, "restaurantName"), occasions=model.returnDatabaseColumnData(model.Occasion, "diningOccasion"), cuisines=model.returnDatabaseColumnData(model.Cuisine, "cuisine"), services=model.returnDatabaseColumnData(model.ServiceType, "serviceType"), mealtypes=model.returnDatabaseColumnData(model.MealType, "mealOption"))
 
 
-@app.route('/admin', methods=['GET', 'POST'])
+@app.route('/admin', methods=['GET'])
 def adminRoute():
-    if request.method == "POST":
-        # Placeholder for getting admin access and returning the CSV
-        downloadCSV()
-    else:
-        return render_template("adminLogin.html")
+    return render_template("Admin.html")
 
 @app.route('/download', methods=['GET'])
 def downloadCSV():
