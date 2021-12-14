@@ -157,7 +157,6 @@ def addReview(restaurantID,suitedfor,expense,quality, ambiance,servicequality,cl
     restaurant_to_update.avgOverallRating = round(avgOverallRating / reviewNumber)
     db.session.commit()
 
-
 def addSingleDBOption(type, option):
     if type == "service":
         new_option = ServiceType(serviceType=option)
