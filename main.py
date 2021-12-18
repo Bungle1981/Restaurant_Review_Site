@@ -9,7 +9,7 @@ app.config["DEBUG"] = True
 csvPath = "RestaurantData.csv"
 
 # MODEL CODE - ORIGINALLY IN A SEPARATE MODULE BUT HEROKU DOESN'T SEEM TO LIKE THIS
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get("DATABASE_URL", "sqlite:///data.db")
+app.config['SQLALCHEMY_DATABASE_URI'] = ("DATABASE_URL", "sqlite:///data.db")
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False #prevents some warnings
 db = SQLAlchemy(app)
 
