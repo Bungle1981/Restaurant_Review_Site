@@ -1,15 +1,21 @@
 "use strict";
 
 // Variables
+//API URLSs
+//const SEARCH_API_ENDPOINT = "http://127.0.0.1:5000/search?";
+//const RESTAURANT_INFO_API_ENDPOINT = "http://127.0.0.1:5000/restaurantinfo?";
+//const REVIEWS_API_ENDPOINT = "http://127.0.0.1:5000/getreviews?";
+//const ADDREVIEW_API_ENDPOINT = "http://127.0.0.1:5000/addreview";
+const SEARCH_API_ENDPOINT = "https://restaurantreview-site.herokuapp.com/search?";
+const RESTAURANT_INFO_API_ENDPOINT = "https://restaurantreview-site.herokuapp.com/restaurantinfo?";
+const REVIEWS_API_ENDPOINT = "https://restaurantreview-site.herokuapp.com/getreviews?";
+const ADDREVIEW_API_ENDPOINT = "https://restaurantreview-site.herokuapp.com/addreview";
+
 const searchButton = document.querySelector(`#searchButton`);
 const restaurantNameSearch = document.querySelector(`#restaurantSearch`);
 const cuisineSearch = document.querySelector(`#cuisine-dropdown`);
 const costSearch = document.querySelector(`#cost-dropdown`);
 const occasionSearch = document.querySelector(`#occasion-dropdown`);
-const SEARCH_API_ENDPOINT = "http://127.0.0.1:5000/search?";
-const RESTAURANT_INFO_API_ENDPOINT = "http://127.0.0.1:5000/restaurantinfo?";
-const REVIEWS_API_ENDPOINT = "http://127.0.0.1:5000/getreviews?";
-const ADDREVIEW_API_ENDPOINT = "http://127.0.0.1:5000/addreview"; 
 const loader = document.querySelector(`.loader`);
 let addRestaurantButton; 
 const searchForm = document.querySelector(`.search-form`);

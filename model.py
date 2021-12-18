@@ -157,18 +157,6 @@ def addReview(restaurantID,suitedfor,expense,quality, ambiance,servicequality,cl
     restaurant_to_update.avgOverallRating = round(avgOverallRating / reviewNumber)
     db.session.commit()
 
-def addSingleDBOption(type, option):
-    if type == "service":
-        new_option = ServiceType(serviceType=option)
-    elif type == "occasion":
-        new_option = Occasion(diningOccasion=option)
-    elif type == "cuisine":
-        new_option = Cuisine(cuisine=option)
-    elif type == "diningoption":
-        new_option = MealType(mealOption=option)
-    db.session.add(new_option)
-    db.session.commit()
-
 # FUNCTIONS TO RETURN DATA FROM DATABASE
 def returnDatabaseColumnData(table, column):
     #Returns specific column from table - i.e. to populate drop down lists
