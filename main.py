@@ -2,23 +2,13 @@ import csv
 from flask import Flask, render_template, request, send_file, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import relationship, load_only
-import os
 
 app = Flask(__name__)
 app.config["DEBUG"] = True
 csvPath = "RestaurantData.csv"
 
-# uri = os.environ.get("DATABASE_URL")
-# if uri and uri.startswith("postgres://"):
-#     uri = uri.replace("postgres://", "postgresql://", 1)
-#     app.config['SQLALCHEMY_DATABASE_URI'] = uri
-# else:
-#     app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///data.db"
-
 # MODEL CODE - ORIGINALLY IN A SEPARATE MODULE BUT HEROKU DOESN'T SEEM TO LIKE THIS
-
-# app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get("DATABASE_URL", "sqlite:///data.db")
-app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///data.db"
+app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///data.db" #Not the best for Heroku but constant issues trying other routes - now worth the hassle purely for testing.
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False #prevents some warnings
 db = SQLAlchemy(app)
 
@@ -180,14 +170,12 @@ def returnDatabaseData(table):
     #Returns entire table
     return db.session.query(table).all()
 
-
 # API FUNCTIONS
 def APISearch(restaurantname="", cuisine="", cost="", occasion=""):
     # Searches data to find restaurants that match search criteria
     restaurantIDs = []
     filters = []
     if restaurantname:
-        # filters.append(Restaurant.restaurantName.like(restaurantname))
         filters.append(Restaurant.restaurantName.contains(restaurantname))
     if cuisine:
         filters.append(Restaurant.cuisineType.contains(cuisine))
@@ -211,9 +199,9 @@ def returnReviews(id):
     return jsonify(results=[review.to_dict() for review in reviews])  # Creates a dictionary item for each within the same JSON
 
 
-
-# MAIN.PY CONTENT - API ROUTES AND FUNCTIONS
+# ORIGINAL MAIN.PY CONTENT - API ROUTES AND FUNCTIONS
 def createCSV():
+    # Function to create CSV file from reviews
     with open(csvPath, 'w', newline='') as csvfile:
         writer = csv.DictWriter(csvfile, fieldnames=['Review_ID', 'Restaurant', 'Service_Type', 'Cuisine', 'Suited_For',
                                                     'Dining_Options', 'Cost_PerHead', 'Food_Quality', 'Ambiance', 'Service_Quality', 'Cleanliness',
@@ -248,7 +236,6 @@ def api_RestaurantSearch():
     cuisine = request.args.get('cuisine')
     cost = request.args.get('cost')
     occasion = request.args.get('occasion')
-    # print(f"name: {name}\ncuisine: {cuisine}\ncost: {cost}\noccasion: {occasion}")
     response = APISearch(restaurantname=name, cuisine=cuisine, cost=cost, occasion=occasion)
     response.headers.add('Access-Control-Allow-Origin', '*')
     return response
@@ -318,15 +305,14 @@ def api_AddReview():
         return response
 
 # NON-API ROUTES
-
 @app.route('/', methods=["GET"])
 def homePage():
-    # # Loads drop down values and renders them to the search page
+    # Loads drop down values and renders them to the search page
     return render_template("Index.html", restaurants=returnDatabaseColumnData(Restaurant, "restaurantName"), occasions=returnDatabaseColumnData(Occasion, "diningOccasion"), cuisines=returnDatabaseColumnData(Cuisine, "cuisine"), services=returnDatabaseColumnData(ServiceType, "serviceType"), mealtypes=returnDatabaseColumnData(MealType, "mealOption"))
-
 
 @app.route('/admin', methods=['GET'])
 def adminRoute():
+    # Renders admin page
     return render_template("Admin.html")
 
 @app.route('/download', methods=['GET'])
